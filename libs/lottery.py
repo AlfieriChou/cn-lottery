@@ -23,7 +23,7 @@ def download_lottery_by_page(page):
       a = li.a
       href = a.get('href')
       title = a.get('title').encode('iso-8859-1').decode('UTF-8')
-      if title.startswith('20') is False and '彩票销售情况' not in title:
+      if '彩票销售情况' not in title:
         continue
       # 2017年3月的数据结构不同，td->ol->a
       if '2017年3月份全国彩票销售情况' in title:
