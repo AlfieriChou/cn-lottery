@@ -58,7 +58,7 @@ def download_lottery_by_page(page):
         ol = soup.find_all('ol')[0]
         download_a = ol.a
         download_href = download_a.get('href')
-        download_url = base_url + '/zonghexinxi/201704/' + download_href[2:]
+        download_url = 'https://www.mof.gov.cn/gp/xxgkml/zhs/201704/P020170419592005376814.xlsx'
         print(href, title, download_url)
         download_path = 'xlsx/' + download_href[2:]
         urllib.request.urlretrieve(download_url, download_path)
