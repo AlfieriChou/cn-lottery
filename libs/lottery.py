@@ -11,7 +11,7 @@ def get_lottery_list_url(page):
   return lottery_url
 
 
-def download_lottery_list_by_page(page):
+def download_lottery_by_page(page):
   lottery_url = get_lottery_list_url(page)
   soup = BeautifulSoup(get_html(lottery_url), 'html.parser')
   ul_list = soup.find_all('ul', class_='liBox')
