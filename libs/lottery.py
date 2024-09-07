@@ -13,6 +13,7 @@ def get_lottery_list_url(page):
 
 
 def download_lottery_by_page(page):
+  download_list = []
   lottery_url = get_lottery_list_url(page)
   soup = BeautifulSoup(get_html(lottery_url), 'html.parser')
   ul_list = soup.find_all('ul', class_='liBox')
@@ -34,6 +35,7 @@ def download_lottery_by_page(page):
         print(href, title, download_url)
         download_path = 'xlsx/' + download_href[2:]
         urllib.request.urlretrieve(download_url, download_path)
+        download_list.append(download_path)
         continue
       soup = BeautifulSoup(
         get_html(base_url + '/zonghexinxi/' + href[2:]), 'html.parser'
@@ -49,3 +51,6 @@ def download_lottery_by_page(page):
       print(href, title, download_url)
       download_path = 'xlsx/' + download_href[2:]
       urllib.request.urlretrieve(download_url, download_path)
+      download_list.append(download_path)
+
+  return download_list
