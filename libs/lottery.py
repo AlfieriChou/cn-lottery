@@ -105,3 +105,80 @@ def read_lottery_xlsx(series_name, xlsx_path):
         list.append(lottery_list)
 
   return list
+
+
+def write_lottery_list_to_db(series_name, list, connection):
+  try:
+    with connection.cursor() as cursor:
+      # 创建表（如果尚未存在）
+      cursor.execute("""
+      CREATE TABLE IF NOT EXISTS lottery (
+        id VARCHAR(64) PRIMARY KEY,
+        series_name VARCHAR(64) NOT NULL,
+        area_code VARCHAR(32) NOT NULL,
+        area_name VARCHAR(32) NOT NULL,
+        fl_month_lottery_sale DECIMAL(10, 3) NOT NULL,
+        fl_month_lottery_year_growth_rate DECIMAL(10, 3) NOT NULL,
+        fl_year_lottery_sale DECIMAL(10, 3) NOT NULL,
+        fl_year_lottery_year_growth_rate DECIMAL(10, 3) NOT NULL,
+        sport_month_lottery_sale DECIMAL(10, 3) NOT NULL,
+        sport_month_lottery_year_growth_rate DECIMAL(10, 3) NOT NULL,
+        sport_year_lottery_sale DECIMAL(10, 3) NOT NULL,
+        sport_year_lottery_year_growth_rate DECIMAL(10, 3) NOT NULL,
+        total_month_lottery_sale DECIMAL(10, 3) NOT NULL,
+        total_month_lottery_year_growth_rate DECIMAL(10, 3) NOT NULL,
+        total_year_lottery_sale DECIMAL(10, 3) NOT NULL,
+        total_year_lottery_year_growth_rate DECIMAL(10, 3) NOT NULL,
+        INDEX idx_id (id),
+        INDEX idx_series_name (series_name),
+        INDEX idx_area_code (area_code),
+        INDEX idx_area_name (area_name),
+        INDEX idx_fl_month_lottery_sale (fl_month_lottery_sale),
+        INDEX idx_fl_month_lottery_year_growth_rate (fl_month_lottery_year_growth_rate),
+        INDEX idx_fl_year_lottery_sale (fl_year_lottery_sale),
+        INDEX idx_fl_year_lottery_year_growth_rate (fl_year_lottery_year_growth_rate),
+        INDEX idx_sport_month_lottery_sale (sport_month_lottery_sale),
+        INDEX idx_sport_month_lottery_year_growth_rate (sport_month_lottery_year_growth_rate),
+        INDEX idx_sport_year_lottery_sale (sport_year_lottery_sale),
+        INDEX idx_sport_year_lottery_year_growth_rate (sport_year_lottery_year_growth_rate),
+        INDEX idx_total_month_lottery_sale (total_month_lottery_sale),
+        INDEX idx_total_month_lottery_year_growth_rate (total_month_lottery_year_growth_rate),
+        INDEX idx_total_year_lottery_sale (total_year_lottery_sale),
+        INDEX idx_total_year_lottery_year_growth_rate (total_year_lottery_year_growth_rate)
+      )
+      """)
+
+      # 插入数据
+      # 构建INSERT语句
+      insert_query = """
+        INSERT IGNORE INTO lottery (
+          id,
+          series_name,
+          area_code,
+          area_name,
+          fl_month_lottery_sale,
+          fl_month_lottery_year_growth_rate,
+          fl_year_lottery_sale,
+          fl_year_lottery_year_growth_rate,
+          sport_month_lottery_sale,
+          sport_month_lottery_year_growth_rate,
+          sport_year_lottery_sale,
+          sport_year_lottery_year_growth_rate,
+          total_month_lottery_sale,
+          total_month_lottery_year_growth_rate,
+          total_year_lottery_sale,
+          total_year_lottery_year_growth_rate
+        ) VALUES (
+          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+        )
+      """
+
+      # 构建并执行多个插入语句
+      for row in list:
+        # 执行INSERT语句
+        cursor.execute(insert_query, row)
+
+      connection.commit()
+
+  finally:
+    print('write lottery list done: ', series_name)
