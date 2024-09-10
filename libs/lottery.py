@@ -93,6 +93,13 @@ def read_lottery_xlsx(series_name, xlsx_path):
     if '各地区彩票销售情况' in sheet_name or 'Sheet3' in sheet_name:
       for index, row in value.iterrows():
         lottery_list = row.to_list()
+        if series_name in ['2021年4月', '2021年3月', '2021年2月']:
+          lottery_list.insert(2, 0)
+          lottery_list.insert(4, 0)
+          lottery_list.insert(6, 0)
+          lottery_list.insert(8, 0)
+          lottery_list.insert(10, 0)
+          lottery_list.insert(12, 0)
         if lottery_list[0] not in area_list:
           continue
         area_code = area_dict[lottery_list[0]]
