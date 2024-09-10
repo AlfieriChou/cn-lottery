@@ -13,11 +13,11 @@ page = 1
 while page < total_page:
   download_dict = download_lottery_by_page(page)
   print('[DOWNLOAD-LIST]: ', page, download_dict)
-  for series_name, xlsx_path in download_dict.items():
-    print('[READ-LIST]: ', series_name, xlsx_path)
-    list = read_lottery_xlsx(series_name, xlsx_path)
+  for series, xlsx_path in download_dict.items():
+    print('[READ-LIST]: ', series, xlsx_path)
+    list = read_lottery_xlsx(series, xlsx_path)
     if len(list) > 0:
-      write_lottery_list_to_db(series_name, list, connection)
+      write_lottery_list_to_db(series, list, connection)
     time.sleep(1)
   time.sleep(5)
   page += 1

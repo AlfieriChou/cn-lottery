@@ -51,7 +51,7 @@ def download_lottery_by_page(page):
       if '彩票销售情况' not in title:
         continue
       time = get_title_exp_time(title)
-      series_name = time.group()
+      series = time.group()
       # 2017年3月的数据结构不同，td->ol->a
       if '2017年3月份全国彩票销售情况' in title:
         soup = BeautifulSoup(get_html(href), 'html.parser')
@@ -62,7 +62,7 @@ def download_lottery_by_page(page):
         print(href, title, download_url)
         download_path = 'xlsx/' + download_href[2:]
         urllib.request.urlretrieve(download_url, download_path)
-        download_dict[series_name] = download_path
+        download_dict[series] = download_path
         continue
       soup = BeautifulSoup(
         get_html(base_url + '/zonghexinxi/' + href[2:]), 'html.parser'
@@ -78,12 +78,12 @@ def download_lottery_by_page(page):
       print(href, title, download_url)
       download_path = 'xlsx/' + download_href[2:]
       urllib.request.urlretrieve(download_url, download_path)
-      download_dict[series_name] = download_path
+      download_dict[series] = download_path
 
   return download_dict
 
 
-def read_lottery_xlsx(series_name, xlsx_path):
+def read_lottery_xlsx(series, xlsx_path):
   list = []
   # 暂不支持解析xls文件
   if xlsx_path.endswith('.xls') is True:
@@ -93,7 +93,7 @@ def read_lottery_xlsx(series_name, xlsx_path):
     if '各地区彩票销售情况' in sheet_name or 'Sheet3' in sheet_name:
       for index, row in value.iterrows():
         lottery_list = row.to_list()
-        if series_name in ['2021年4月', '2021年3月', '2021年2月']:
+        if series in ['2021年4月', '2021年3月', '2021年2月']:
           lottery_list.insert(2, 0)
           lottery_list.insert(4, 0)
           lottery_list.insert(6, 0)
@@ -104,8 +104,8 @@ def read_lottery_xlsx(series_name, xlsx_path):
           continue
         area_code = area_dict[lottery_list[0]]
         lottery_list.insert(0, area_code)
-        lottery_list.insert(0, series_name)
-        id = series_name + area_code
+        lottery_list.insert(0, series)
+        id = series + area_code
         encode_id = md5(id)
         lottery_list.insert(0, encode_id)
         print(xlsx_path, index, lottery_list)
@@ -114,44 +114,44 @@ def read_lottery_xlsx(series_name, xlsx_path):
   return list
 
 
-def write_lottery_list_to_db(series_name, list, connection):
+def write_lottery_list_to_db(series, list, connection):
   try:
     with connection.cursor() as cursor:
       # 创建表（如果尚未存在）
       cursor.execute("""
       CREATE TABLE IF NOT EXISTS lottery (
         id VARCHAR(64) PRIMARY KEY,
-        series_name VARCHAR(64) NOT NULL,
+        series VARCHAR(64) NOT NULL,
         area_code VARCHAR(32) NOT NULL,
         area_name VARCHAR(32) NOT NULL,
-        fl_month_lottery_sale DECIMAL(10, 3) NOT NULL,
-        fl_month_lottery_year_growth_rate DECIMAL(10, 3) NOT NULL,
-        fl_year_lottery_sale DECIMAL(10, 3) NOT NULL,
-        fl_year_lottery_year_growth_rate DECIMAL(10, 3) NOT NULL,
-        sport_month_lottery_sale DECIMAL(10, 3) NOT NULL,
-        sport_month_lottery_year_growth_rate DECIMAL(10, 3) NOT NULL,
-        sport_year_lottery_sale DECIMAL(10, 3) NOT NULL,
-        sport_year_lottery_year_growth_rate DECIMAL(10, 3) NOT NULL,
-        total_month_lottery_sale DECIMAL(10, 3) NOT NULL,
-        total_month_lottery_year_growth_rate DECIMAL(10, 3) NOT NULL,
-        total_year_lottery_sale DECIMAL(10, 3) NOT NULL,
-        total_year_lottery_year_growth_rate DECIMAL(10, 3) NOT NULL,
+        fl_month_sale DECIMAL(10, 3) NOT NULL,
+        fl_month_on_year_growth_rate DECIMAL(10, 3) NOT NULL,
+        fl_year_sale DECIMAL(10, 3) NOT NULL,
+        fl_year_on_year_growth_rate DECIMAL(10, 3) NOT NULL,
+        sport_month_sale DECIMAL(10, 3) NOT NULL,
+        sport_month_on_year_growth_rate DECIMAL(10, 3) NOT NULL,
+        sport_year_sale DECIMAL(10, 3) NOT NULL,
+        sport_year_on_year_growth_rate DECIMAL(10, 3) NOT NULL,
+        total_month_sale DECIMAL(10, 3) NOT NULL,
+        total_month_on_year_growth_rate DECIMAL(10, 3) NOT NULL,
+        total_year_sale DECIMAL(10, 3) NOT NULL,
+        total_year_on_year_growth_rate DECIMAL(10, 3) NOT NULL,
         INDEX idx_id (id),
-        INDEX idx_series_name (series_name),
+        INDEX idx_series (series),
         INDEX idx_area_code (area_code),
         INDEX idx_area_name (area_name),
-        INDEX idx_fl_month_lottery_sale (fl_month_lottery_sale),
-        INDEX idx_fl_month_lottery_year_growth_rate (fl_month_lottery_year_growth_rate),
-        INDEX idx_fl_year_lottery_sale (fl_year_lottery_sale),
-        INDEX idx_fl_year_lottery_year_growth_rate (fl_year_lottery_year_growth_rate),
-        INDEX idx_sport_month_lottery_sale (sport_month_lottery_sale),
-        INDEX idx_sport_month_lottery_year_growth_rate (sport_month_lottery_year_growth_rate),
-        INDEX idx_sport_year_lottery_sale (sport_year_lottery_sale),
-        INDEX idx_sport_year_lottery_year_growth_rate (sport_year_lottery_year_growth_rate),
-        INDEX idx_total_month_lottery_sale (total_month_lottery_sale),
-        INDEX idx_total_month_lottery_year_growth_rate (total_month_lottery_year_growth_rate),
-        INDEX idx_total_year_lottery_sale (total_year_lottery_sale),
-        INDEX idx_total_year_lottery_year_growth_rate (total_year_lottery_year_growth_rate)
+        INDEX idx_fl_month_sale (fl_month_sale),
+        INDEX idx_fl_month_on_year_growth_rate (fl_month_on_year_growth_rate),
+        INDEX idx_fl_year_sale (fl_year_sale),
+        INDEX idx_fl_year_on_year_growth_rate (fl_year_on_year_growth_rate),
+        INDEX idx_sport_month_sale (sport_month_sale),
+        INDEX idx_sport_month_on_year_growth_rate (sport_month_on_year_growth_rate),
+        INDEX idx_sport_year_sale (sport_year_sale),
+        INDEX idx_sport_year_on_year_growth_rate (sport_year_on_year_growth_rate),
+        INDEX idx_total_month_sale (total_month_sale),
+        INDEX idx_total_month_on_year_growth_rate (total_month_on_year_growth_rate),
+        INDEX idx_total_year_sale (total_year_sale),
+        INDEX idx_total_year_on_year_growth_rate (total_year_on_year_growth_rate)
       )
       """)
 
@@ -160,21 +160,21 @@ def write_lottery_list_to_db(series_name, list, connection):
       insert_query = """
         INSERT IGNORE INTO lottery (
           id,
-          series_name,
+          series,
           area_code,
           area_name,
-          fl_month_lottery_sale,
-          fl_month_lottery_year_growth_rate,
-          fl_year_lottery_sale,
-          fl_year_lottery_year_growth_rate,
-          sport_month_lottery_sale,
-          sport_month_lottery_year_growth_rate,
-          sport_year_lottery_sale,
-          sport_year_lottery_year_growth_rate,
-          total_month_lottery_sale,
-          total_month_lottery_year_growth_rate,
-          total_year_lottery_sale,
-          total_year_lottery_year_growth_rate
+          fl_month_sale,
+          fl_month_on_year_growth_rate,
+          fl_year_sale,
+          fl_year_on_year_growth_rate,
+          sport_month_sale,
+          sport_month_on_year_growth_rate,
+          sport_year_sale,
+          sport_year_on_year_growth_rate,
+          total_month_sale,
+          total_month_on_year_growth_rate,
+          total_year_sale,
+          total_year_on_year_growth_rate
         ) VALUES (
           %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
         )
@@ -188,4 +188,4 @@ def write_lottery_list_to_db(series_name, list, connection):
       connection.commit()
 
   finally:
-    print('write lottery list done: ', series_name)
+    print('write lottery list done: ', series)
