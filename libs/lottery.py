@@ -2,7 +2,6 @@ from bs4 import BeautifulSoup
 import urllib.request
 import pandas as pd
 import re
-import datetime
 
 from libs.html import get_html
 from libs.area import area_dict, area_list
@@ -83,10 +82,10 @@ def download_lottery_by_page(page):
   return download_dict
 
 def read_lottery_xlsx(series_name, xlsx_path):
+  list = []
   # 暂不支持解析xls文件
   if xlsx_path.endswith('.xls') is True:
-    return
-  list = []
+    return list
   dfs = pd.read_excel(xlsx_path, sheet_name=None)
   for sheet_name, value in dfs.items():
     if '各地区彩票销售情况' in sheet_name or 'Sheet3' in sheet_name:
