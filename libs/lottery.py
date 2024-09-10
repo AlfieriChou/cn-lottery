@@ -6,6 +6,7 @@ import pyexcel as p
 
 from libs.html import get_html
 from libs.area import area_dict, area_list
+from libs.md5 import md5
 
 base_url = 'https://zhs.mof.gov.cn'
 
@@ -27,7 +28,6 @@ def get_title_exp_time(link_title):
     )
   )[0]
   return time
-
 
 
 def get_lottery_list_url(page):
@@ -82,6 +82,7 @@ def download_lottery_by_page(page):
 
   return download_dict
 
+
 def read_lottery_xlsx(series_name, xlsx_path):
   list = []
   # 暂不支持解析xls文件
@@ -94,8 +95,12 @@ def read_lottery_xlsx(series_name, xlsx_path):
         lottery_list = row.to_list()
         if lottery_list[0] not in area_list:
           continue
-        lottery_list.insert(0, area_dict[lottery_list[0]])
+        area_code = area_dict[lottery_list[0]]
+        lottery_list.insert(0, area_code)
         lottery_list.insert(0, series_name)
+        id = series_name + area_code
+        encode_id = md5(id)
+        lottery_list.insert(0, encode_id)
         print(xlsx_path, index, lottery_list)
         list.append(lottery_list)
 
