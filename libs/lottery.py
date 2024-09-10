@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import urllib.request
 import pandas as pd
 import re
+import pyexcel as p
 
 from libs.html import get_html
 from libs.area import area_dict, area_list
@@ -85,7 +86,7 @@ def read_lottery_xlsx(series_name, xlsx_path):
   list = []
   # 暂不支持解析xls文件
   if xlsx_path.endswith('.xls') is True:
-    return list
+    p.save_book_as(file_name=xlsx_path, dest_file_name=xlsx_path + 'x')
   dfs = pd.read_excel(xlsx_path, sheet_name=None)
   for sheet_name, value in dfs.items():
     if '各地区彩票销售情况' in sheet_name or 'Sheet3' in sheet_name:
