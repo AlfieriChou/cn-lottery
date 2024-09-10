@@ -39,7 +39,7 @@ def get_lottery_list_url(page):
 
 def download_lottery_by_page(page):
   download_dict = {}
-  lottery_url = get_lottery_list_url(page)
+  lottery_url = get_lottery_list_url(page - 1)
   soup = BeautifulSoup(get_html(lottery_url), 'html.parser')
   ul_list = soup.find_all('ul', class_='liBox')
   for ul in ul_list:
