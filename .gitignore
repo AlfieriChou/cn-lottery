@@ -164,3 +164,6 @@ cython_debug/
 # xlsx
 xlsx/*.xlsx
 xlsx/*.xls
+
+# image
+img/*.png
