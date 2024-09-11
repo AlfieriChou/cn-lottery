@@ -115,7 +115,7 @@ def read_lottery_xlsx(series, xlsx_path):
         area_code = area_dict[lottery_list[0]]
         lottery_list.insert(0, area_code)
         lottery_list.insert(0, series)
-        date = datetime.datetime.strptime(series, "%Y年%m月%d日")
+        date = datetime.datetime.strptime(series, "%Y年%m月")
         series_timestamp = int(date.timestamp())
         lottery_list.insert(0, series_timestamp)
         id = series + area_code
