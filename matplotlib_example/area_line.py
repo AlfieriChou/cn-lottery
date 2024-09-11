@@ -16,20 +16,21 @@ def generate_line_chart(area_name):
   try:
     with connection.cursor() as cursor:
       # 查询并打印结果以验证数据插入成功
-      cursor.execute("SELECT area_name, series, fl_month_sale FROM lottery WHERE area_name = %s order by series asc limit 24", (area_name))
+      cursor.execute("SELECT area_name, series, series_timestamp, fl_month_sale FROM lottery WHERE area_name = %s order by series_timestamp desc limit 24", (area_name))
 
       x = []
       y = []
       for row in cursor.fetchall():
-        x.append(row['series'])
+        x.append(row['series'][2:])
         y.append(row['fl_month_sale'])
 
-      plt.figure(figsize=(14, 6))  # 设置画布大小
-      
+      x.reverse()
+      y.reverse()
+
       x = np.array(x)
       y = np.array(y)
 
-      plt.figure(figsize=(14, 6))  # 设置画布大小
+      plt.figure(figsize=(20, 6))  # 设置画布大小
       plt.title('彩票趋势_' + area_name)  # 折线图标题
       plt.rcParams['font.sans-serif'] = ['SimHei']  # 显示汉字
       plt.rcParams['axes.unicode_minus'] = False
