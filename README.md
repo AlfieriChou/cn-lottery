@@ -13,3 +13,24 @@ Synchronize Chinese lottery data
 * 如果当前下载的文件后缀是xls，先转成xlsx文件
 * 读取xlsx各地区彩票销售情况数据
 * 整理结构写入数据库留存
+
+
+## 如何使用
+
+1. 更改env.py的mysql数据库配置
+
+```
+touch env.py
+```
+
+2. 安装依赖包
+
+```
+make install
+```
+
+3. 命令行启动同步任务（暂未添加失败重试逻辑，如遇接口异常，重新同步）
+
+```
+python3 main.py
+```
