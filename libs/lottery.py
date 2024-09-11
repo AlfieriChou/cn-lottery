@@ -3,6 +3,7 @@ import urllib.request
 import pandas as pd
 import re
 import pyexcel as p
+import datetime
 
 from libs.html import get_html
 from libs.area import area_dict, area_list
@@ -114,6 +115,9 @@ def read_lottery_xlsx(series, xlsx_path):
         area_code = area_dict[lottery_list[0]]
         lottery_list.insert(0, area_code)
         lottery_list.insert(0, series)
+        date = datetime.datetime.strptime(series, "%Y年%m月")
+        series_timestamp = int(date.timestamp())
+        lottery_list.insert(0, series_timestamp)
         id = series + area_code
         encode_id = md5(id)
         lottery_list.insert(0, encode_id)
@@ -130,6 +134,7 @@ def write_lottery_list_to_db(series, list, connection):
       cursor.execute("""
       CREATE TABLE IF NOT EXISTS lottery (
         id VARCHAR(64) PRIMARY KEY,
+        series_timestamp INT NOT NULL,
         series VARCHAR(64) NOT NULL,
         area_code VARCHAR(32) NOT NULL,
         area_name VARCHAR(32) NOT NULL,
@@ -146,6 +151,7 @@ def write_lottery_list_to_db(series, list, connection):
         total_year_sale DECIMAL(10, 3) NOT NULL,
         total_year_on_year_growth_rate DECIMAL(10, 3) NOT NULL,
         INDEX idx_id (id),
+        INDEX idx_series_timestamp (series_timestamp),
         INDEX idx_series (series),
         INDEX idx_area_code (area_code),
         INDEX idx_area_name (area_name),
@@ -169,6 +175,7 @@ def write_lottery_list_to_db(series, list, connection):
       insert_query = """
         INSERT IGNORE INTO lottery (
           id,
+          series_timestamp,
           series,
           area_code,
           area_name,
@@ -185,7 +192,7 @@ def write_lottery_list_to_db(series, list, connection):
           total_year_sale,
           total_year_on_year_growth_rate
         ) VALUES (
-          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
+          %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s
         )
       """
 
