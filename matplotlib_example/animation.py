@@ -98,18 +98,18 @@ def draw_barchart(year):
   dx = df_year['value'].max() / 200
   for i, (value, name) in enumerate(zip(df_year['value'], df_year['name'])):
     # 城市名
-    ax.text(value - dx, i, name, size=12, weight=600, ha='right', va='bottom')
+    # ax.text(value - dx, i, name, size=32, weight=600, ha='right', va='bottom')
     ax.text(
       value - dx,
       i - 0.25,
       group_name[name],
-      size=10,
+      size=40,
       color='#333333',
       ha='right',
       va='baseline',
     )
     # 地区名
-    ax.text(value + dx, i, f'{value:,.0f}', size=12, ha='left', va='center')
+    ax.text(value + dx, i, f'{value:,.0f}', size=40, ha='left', va='center')
 
   # 设置其他样式
   ax.text(
@@ -125,9 +125,9 @@ def draw_barchart(year):
   ax.text(
     0,
     1.06,
-    '金额 (亿元)',
+    '金额 (万元)',
     transform=ax.transAxes,
-    size=12,
+    size=40,
     color='#777777',
   )
   # 添加图例
@@ -137,7 +137,7 @@ def draw_barchart(year):
     handles.append(patch)
   ax.legend(
     handles=handles,
-    fontsize=12,
+    fontsize=40,
     loc='center',
     bbox_to_anchor=(0.5, -0.03),
     ncol=len(group_color),
@@ -165,7 +165,7 @@ def draw_barchart(year):
     1.10,
     f'东南沿海五省福利彩票11年销售数据统计',
     transform=ax.transAxes,
-    size=24,
+    size=48,
     weight=600,
     ha='left',
   )
@@ -177,13 +177,14 @@ def draw_barchart(year):
     transform=ax.transAxes,
     ha='right',
     color='#777777',
+    size=24,
     bbox=dict(facecolor='white', alpha=0.8, edgecolor='white'),
   )
   plt.box(False)
 
 
 # 创建绘图所需的figure和axes
-fig, ax = plt.subplots(figsize=(12, 8))
+fig, ax = plt.subplots(figsize=(32, 18))
 plt.rcParams['font.sans-serif'] = ['SimHei']  # 显示汉字
 plt.rcParams['axes.unicode_minus'] = False
 
@@ -214,4 +215,6 @@ fig.subplots_adjust(left=0.04, right=0.94, bottom=0.05)
 # plt.show()
 ani.save(filename="video/east_south_animation.mp4", writer="ffmpeg")
 
-# ffmpeg -i video.mp4 -i audio.wav -map 0:v -map 1:a -c:v copy -shortest output.mp4
+# ffmpeg -i music.mp3 music.wav
+# ffmpeg -i music.wav -ss 0 -t 37 musicshort.wav
+# ffmpeg -i musicshort.wav -i east_south_animation.mp4 output.mp4
