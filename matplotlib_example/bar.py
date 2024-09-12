@@ -11,12 +11,16 @@ matplotlib.use('agg')
 font_manager.fontManager.addfont('font/SimHei.ttf')
 matplotlib.rc('font', family='SimHei')
 
+
 def generate_bar(series):
   filepath = 'img/bar_' + series + '.png'
   try:
     with connection.cursor() as cursor:
       # 查询并打印结果以验证数据插入成功
-      cursor.execute("SELECT area_name, area_code, fl_month_sale FROM lottery WHERE series = %s order by fl_month_sale desc", (series))
+      cursor.execute(
+        'SELECT area_name, area_code, fl_month_sale FROM lottery WHERE series = %s order by fl_month_sale desc',
+        (series),
+      )
 
       x = []
       y = []
@@ -32,7 +36,7 @@ def generate_bar(series):
 
       plt.xlabel('省市')  # x轴标题
       plt.ylabel('值')  # y轴标题
-      
+
       x = np.array(x)
       y = np.array(y)
 

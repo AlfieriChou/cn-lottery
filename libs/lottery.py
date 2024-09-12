@@ -104,18 +104,35 @@ def read_lottery_xlsx(series, xlsx_path):
           lottery_list.insert(10, 0)
           lottery_list.insert(12, 0)
         if series in [
-          '2014年12月', '2014年11月', '2014年10月', '2014年9月',
-          '2014年8月', '2014年7月', '2014年6月', '2014年5月',
-          '2014年4月', '2014年3月', '2014年2月', '2014年1月',
-          '2013年11月', '2013年10月', '2013年9月', '2013年8月',
-          '2013年7月', '2013年6月', '2013年5月', '2013年4月',
-          '2013年3月', '2013年2月', '2013年1月',
+          '2014年12月',
+          '2014年11月',
+          '2014年10月',
+          '2014年9月',
+          '2014年8月',
+          '2014年7月',
+          '2014年6月',
+          '2014年5月',
+          '2014年4月',
+          '2014年3月',
+          '2014年2月',
+          '2014年1月',
+          '2013年11月',
+          '2013年10月',
+          '2013年9月',
+          '2013年8月',
+          '2013年7月',
+          '2013年6月',
+          '2013年5月',
+          '2013年4月',
+          '2013年3月',
+          '2013年2月',
+          '2013年1月',
         ]:
           lottery_list.pop()
         area_code = area_dict[lottery_list[0]]
         lottery_list.insert(0, area_code)
         lottery_list.insert(0, series)
-        date = datetime.datetime.strptime(series, "%Y年%m月")
+        date = datetime.datetime.strptime(series, '%Y年%m月')
         series_timestamp = int(date.timestamp())
         lottery_list.insert(0, series_timestamp)
         id = series + area_code

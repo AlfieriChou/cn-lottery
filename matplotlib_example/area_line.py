@@ -11,12 +11,16 @@ matplotlib.use('agg')
 font_manager.fontManager.addfont('font/SimHei.ttf')
 matplotlib.rc('font', family='SimHei')
 
+
 def generate_line_chart(area_name):
   filepath = 'img/line_' + area_name + '.png'
   try:
     with connection.cursor() as cursor:
       # 查询并打印结果以验证数据插入成功
-      cursor.execute("SELECT area_name, series, series_timestamp, fl_month_sale FROM lottery WHERE area_name = %s order by series_timestamp desc limit 24", (area_name))
+      cursor.execute(
+        'SELECT area_name, series, series_timestamp, fl_month_sale FROM lottery WHERE area_name = %s order by series_timestamp desc limit 24',
+        (area_name),
+      )
 
       x = []
       y = []
