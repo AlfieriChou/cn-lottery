@@ -167,3 +167,6 @@ xlsx/*.xls
 
 # image
 img/*.png
+
+# video
+video/*.mp4

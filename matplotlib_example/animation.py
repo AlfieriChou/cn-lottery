@@ -124,7 +124,7 @@ def draw_barchart(year):
   ax.text(
     0,
     1.06,
-    '金额 (百亿元)',
+    '金额 (亿元)',
     transform=ax.transAxes,
     size=12,
     color='#777777',
@@ -162,7 +162,7 @@ def draw_barchart(year):
   ax.text(
     0,
     1.10,
-    f'彩票趋势分析',
+    f'福利彩票5年趋势分析',
     transform=ax.transAxes,
     size=24,
     weight=600,
@@ -185,8 +185,12 @@ def draw_barchart(year):
 fig, ax = plt.subplots(figsize=(12, 8))
 plt.rcParams['font.sans-serif'] = ['SimHei']  # 显示汉字
 plt.rcParams['axes.unicode_minus'] = False
-start_year = 201907
-end_year = 202407
+
+year_list = list(set(df.year))
+year_list.sort()
+start_year = min(year_list)
+end_year = max(year_list)
+
 # 设置最多显示城市数量
 max_range = 4
 
@@ -194,9 +198,6 @@ max_range = 4
 min_year, max_year = min(set(df.year)), max(set(df.year))
 assert min_year <= start_year, f'end_year cannot be lower than {min_year}'
 assert end_year <= max_year, f'end_year cannot be higher  than {max_year}'
-
-year_list = list(set(df.year))
-year_list.sort()
 
 # 创建动画对象，调用draw_barchart函数进行绘制
 ani = FuncAnimation(
@@ -210,5 +211,4 @@ fig.subplots_adjust(left=0.04, right=0.94, bottom=0.05)
 
 # 显示图形
 # plt.show()
-ani.save(filename="ffmpeg_example.mp4", writer="ffmpeg")
-
+ani.save(filename="video/animation.mp4", writer="ffmpeg")
