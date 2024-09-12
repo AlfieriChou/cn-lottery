@@ -26,7 +26,7 @@ def get_area_data_list(area_name):
     total = 0
     for row in data_list:
       date = datetime.datetime.fromtimestamp(row['series_timestamp'])
-      total += float(format(row['fl_month_sale'] / 100, '.2f'))
+      total += float(format(row['fl_month_sale'] / 10000, '.2f'))
       dict_list.append(
         {
           'name': row['area_name'],
@@ -125,7 +125,7 @@ def draw_barchart(year):
   ax.text(
     0,
     1.06,
-    '金额 (万元)',
+    '金额 (亿元)',
     transform=ax.transAxes,
     size=40,
     color='#777777',
