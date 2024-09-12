@@ -17,7 +17,7 @@ def get_area_data_list(area_name):
   with connection.cursor() as cursor:
     # 查询并打印结果以验证数据插入成功
     cursor.execute(
-      'SELECT area_name, series, series_timestamp, fl_month_sale FROM lottery WHERE area_name = %s order by series_timestamp desc limit 60',
+      'SELECT area_name, series, series_timestamp, fl_month_sale FROM lottery WHERE area_name = %s order by series_timestamp desc limit 132',
       (area_name),
     )
     data_list = cursor.fetchall()
@@ -42,7 +42,8 @@ js_area_list = get_area_data_list('江苏')
 sd_area_list = get_area_data_list('山东')
 gd_area_list = get_area_data_list('广东')
 zj_area_list = get_area_data_list('浙江')
-dict_list = js_area_list + sd_area_list + gd_area_list + zj_area_list
+fj_area_list = get_area_data_list('福建')
+dict_list = js_area_list + sd_area_list + gd_area_list + zj_area_list + fj_area_list
 df = pd.DataFrame.from_dict(dict_list)
 connection.close()
 
@@ -162,7 +163,7 @@ def draw_barchart(year):
   ax.text(
     0,
     1.10,
-    f'福利彩票5年趋势分析',
+    f'东南沿海五省福利彩票11年销售数据统计',
     transform=ax.transAxes,
     size=24,
     weight=600,
@@ -192,7 +193,7 @@ start_year = min(year_list)
 end_year = max(year_list)
 
 # 设置最多显示城市数量
-max_range = 4
+max_range = 5
 
 # 获取数据中的最小年份和最大年份，并进行校验
 min_year, max_year = min(set(df.year)), max(set(df.year))
@@ -211,4 +212,6 @@ fig.subplots_adjust(left=0.04, right=0.94, bottom=0.05)
 
 # 显示图形
 # plt.show()
-ani.save(filename="video/animation.mp4", writer="ffmpeg")
+ani.save(filename="video/east_south_animation.mp4", writer="ffmpeg")
+
+# ffmpeg -i video.mp4 -i audio.wav -map 0:v -map 1:a -c:v copy -shortest output.mp4
