@@ -25,6 +25,13 @@ def generate_bar(series):
         y.append(row['fl_month_sale'])
 
       plt.figure(figsize=(14, 6))  # 设置画布大小
+
+      plt.title('彩票销售排名_' + series)  # 折线图标题
+      plt.rcParams['font.sans-serif'] = ['SimHei']  # 显示汉字
+      plt.rcParams['axes.unicode_minus'] = False
+
+      plt.xlabel('省市')  # x轴标题
+      plt.ylabel('值')  # y轴标题
       
       x = np.array(x)
       y = np.array(y)
