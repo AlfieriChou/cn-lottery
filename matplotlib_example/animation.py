@@ -12,6 +12,39 @@ from mysql import connection
 font_manager.fontManager.addfont('font/SimHei.ttf')
 matplotlib.rc('font', family='SimHei')
 
+area_list = [
+  '北京',
+  '天津',
+  '河北',
+  '山西',
+  '内蒙古',
+  '辽宁',
+  '吉林',
+  '黑龙江',
+  '上海',
+  '江苏',
+  '浙江',
+  '安徽',
+  '福建',
+  '江西',
+  '山东',
+  '河南',
+  '湖北',
+  '湖南',
+  '广东',
+  '广西',
+  '海南',
+  '重庆',
+  '四川',
+  '贵州',
+  '云南',
+  '西藏',
+  '陕西',
+  '甘肃',
+  '青海',
+  '宁夏',
+  '新疆',
+]
 
 def get_area_data_list(area_name):
   with connection.cursor() as cursor:
@@ -38,14 +71,15 @@ def get_area_data_list(area_name):
 
     return dict_list
 
-js_area_list = get_area_data_list('江苏')
-sd_area_list = get_area_data_list('山东')
-gd_area_list = get_area_data_list('广东')
-zj_area_list = get_area_data_list('浙江')
-fj_area_list = get_area_data_list('福建')
-dict_list = js_area_list + sd_area_list + gd_area_list + zj_area_list + fj_area_list
+dict_list = []
+for area_name in area_list:
+  dict_list += get_area_data_list(area_name)
 df = pd.DataFrame.from_dict(dict_list)
 connection.close()
+
+# 设置最多显示城市数量
+max_range = 10
+title = '中国福利彩票事业TOP10省市'
 
 
 # 定义一个函数，用于生成颜色列表
@@ -163,7 +197,7 @@ def draw_barchart(year):
   ax.text(
     0,
     1.10,
-    f'东南沿海五省福利彩票11年销售数据统计',
+    f'{title}',
     transform=ax.transAxes,
     size=48,
     weight=600,
@@ -192,9 +226,6 @@ year_list = list(set(df.year))
 year_list.sort()
 start_year = min(year_list)
 end_year = max(year_list)
-
-# 设置最多显示城市数量
-max_range = 5
 
 # 获取数据中的最小年份和最大年份，并进行校验
 min_year, max_year = min(set(df.year)), max(set(df.year))
