@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 from matplotlib.animation import FuncAnimation
-import matplotlib.patches as mpatches
+import matplotlib.patches as plt_patches
 import matplotlib
 from matplotlib import font_manager
 import datetime
@@ -112,7 +112,7 @@ group_name = df.set_index('name')['group'].to_dict()
 
 
 # 定义绘制柱状图的函数
-def draw_barchart(year):
+def draw_bar_chart(year):
   # 根据年份筛选数据，并按人口数量进行降序排序，取出最大范围的数据
   df_year = (
     df[df['year'].eq(year)]
@@ -167,7 +167,7 @@ def draw_barchart(year):
   # 添加图例
   handles = []
   for name, color in group_color.items():
-    patch = mpatches.Patch(color=color, label=name)
+    patch = plt_patches.Patch(color=color, label=name)
     handles.append(patch)
   ax.legend(
     handles=handles,
@@ -232,10 +232,10 @@ min_year, max_year = min(set(df.year)), max(set(df.year))
 assert min_year <= start_year, f'end_year cannot be lower than {min_year}'
 assert end_year <= max_year, f'end_year cannot be higher  than {max_year}'
 
-# 创建动画对象，调用draw_barchart函数进行绘制
+# 创建动画对象，调用draw_bar_chart函数进行绘制
 ani = FuncAnimation(
   fig,
-  draw_barchart,
+  draw_bar_chart,
   frames=year_list,
   repeat_delay=1000,
   interval=200,
