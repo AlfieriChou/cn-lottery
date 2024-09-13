@@ -46,6 +46,7 @@ area_list = [
   '新疆',
 ]
 
+
 def get_area_data_list(area_name):
   with connection.cursor() as cursor:
     # 查询并打印结果以验证数据插入成功
@@ -70,6 +71,7 @@ def get_area_data_list(area_name):
       )
 
     return dict_list
+
 
 dict_list = []
 for area_name in area_list:
@@ -244,7 +246,7 @@ fig.subplots_adjust(left=0.04, right=0.94, bottom=0.05)
 
 # 显示图形
 # plt.show()
-ani.save(filename="video/east_south_animation.mp4", writer="ffmpeg")
+ani.save(filename='video/east_south_animation.mp4', writer='ffmpeg')
 
 # ffmpeg -i music.mp3 music.wav
 # ffmpeg -i music.wav -ss 0 -t 37 musicshort.wav
