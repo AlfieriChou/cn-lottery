@@ -63,7 +63,7 @@ def get_area_data_list(area_name):
         {
           'name': row['area_name'],
           'group': row['area_name'],
-          'date': date.strftime('%Y%m'),
+          'date': date.strftime('%Y年%m月'),
           'value': float(format(row['fl_month_sale'] / 10000, '.2f')),
         }
       )
@@ -131,4 +131,6 @@ anim = FuncAnimation(
   frames=len(df['date'].unique()),
 )
 
-plt.show()
+# plt.show()
+anim.save(filename='video/map_animation.mp4', writer='ffmpeg')
+

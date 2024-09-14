@@ -100459,6 +100459,7 @@
       "type": "Feature",
       "properties": {
         "adcode": 710000,
+        "name": "台湾省",
         "childrenNum": 0,
         "level": "province",
         "parent": {
@@ -101230,6 +101231,7 @@
       "type": "Feature",
       "properties": {
         "adcode": 810000,
+        "name": "香港特别行政区",
         "childrenNum": 18,
         "level": "province",
         "parent": {
@@ -101721,6 +101723,7 @@
       "type": "Feature",
       "properties": {
         "adcode": 820000,
+        "name": "澳门特别行政区",
         "childrenNum": 8,
         "level": "province",
         "parent": {
@@ -101795,6 +101798,7 @@
     {
       "type": "Feature",
       "properties": {
+        "name": "",
         "adchar": "JD",
         "adcode": "100000_JD"
       },
