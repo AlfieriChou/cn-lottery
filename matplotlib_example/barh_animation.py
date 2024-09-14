@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import matplotlib
 from matplotlib import font_manager
-import pandas as pd
 
 from mysql import connection
 
@@ -60,4 +59,5 @@ for series_dict in series_dict_list:
 
 # 创建一个ArtistAnimation对象，指定图形窗口和图形对象列表以及动画间隔时间
 ani = animation.ArtistAnimation(fig=fig, artists=artists, interval=500)
-plt.show()
+# plt.show()
+ani.save(filename='video/barh_animation.mp4', writer='ffmpeg')

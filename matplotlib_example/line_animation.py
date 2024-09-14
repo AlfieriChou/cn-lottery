@@ -10,6 +10,7 @@ from mysql import connection
 font_manager.fontManager.addfont('font/SimHei.ttf')
 matplotlib.rc('font', family='SimHei')
 
+
 def get_series_data_list(area_name):
   with connection.cursor() as cursor:
     # 查询并打印结果以验证数据插入成功
@@ -35,6 +36,7 @@ def get_series_data_list(area_name):
 
     return dict_list
 
+
 fig = plt.figure(figsize=(32, 18))
 ax = fig.add_subplot(111)
 
@@ -43,7 +45,7 @@ area_name_2 = '浙江'
 dict_list_1 = get_series_data_list(area_name_1)
 dict_list_2 = get_series_data_list(area_name_2)
 
-x =[]
+x = []
 y1 = []
 y2 = []
 
