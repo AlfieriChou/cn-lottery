@@ -44,8 +44,12 @@ area_list = [
   '青海',
   '宁夏',
   '新疆',
+  '台湾省',
+  '香港特别行政区',
+  '澳门特别行政区',
 ]
 provinces = area_list
+dates = []
 
 def get_area_data_list(area_name):
   with connection.cursor() as cursor:
@@ -55,15 +59,20 @@ def get_area_data_list(area_name):
       (area_name),
     )
     data_list = cursor.fetchall()
+    if len(data_list) == 0:
+      return []
     data_list.reverse()
     dict_list = []
     for row in data_list:
       date = datetime.datetime.fromtimestamp(row['series_timestamp'])
+      date_str = date.strftime('%Y年%m月')
+      if date_str not in dates:
+        dates.append(date_str)
       dict_list.append(
         {
           'name': row['area_name'],
           'group': row['area_name'],
-          'date': date.strftime('%Y年%m月'),
+          'date': date_str,
           'value': float(format(row['fl_month_sale'] / 10000, '.2f')),
         }
       )
@@ -73,6 +82,19 @@ def get_area_data_list(area_name):
 
 dict_list = []
 for area_name in area_list:
+  if area_name in ['台湾省', '香港特别行政区', '澳门特别行政区']:
+    dict_list_1 = []
+    for date in dates:
+      dict_list_1.append(
+        {
+          'name': area_name,
+          'group': area_name,
+          'date': date,
+          'value': 0
+        }
+      )
+    dict_list += dict_list_1
+    continue
   dict_list += get_area_data_list(area_name)
 df0 = pd.DataFrame.from_dict(dict_list)
 connection.close()
@@ -87,7 +109,7 @@ df = pd.DataFrame(
   }
 )
 
-fig, ax = plt.subplots(figsize=(16, 12))
+fig, ax = plt.subplots(figsize=(16, 9))
 fontsize = 8
 
 ims = []
@@ -101,6 +123,7 @@ def update_fig(i):
     del ims[0]
   geos = china_w_needed_provinces['geometry']
   value = df[df['date'] == dates[i]]['value'].tolist()
+  print(geos, value)
   artist = gpd.plotting._plot_polygon_collection(ax, geos, value, cmap='Reds')
   ims.append(artist)
   # ax.text(20, 45, 'Date:\n{}'.format(dates[i]), fontsize=fontsize, horizontalalignment='center')
