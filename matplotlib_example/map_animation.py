@@ -51,6 +51,7 @@ area_list = [
 provinces = area_list
 dates = []
 
+
 def get_area_data_list(area_name):
   with connection.cursor() as cursor:
     # 查询并打印结果以验证数据插入成功
@@ -86,12 +87,7 @@ for area_name in area_list:
     dict_list_1 = []
     for date in dates:
       dict_list_1.append(
-        {
-          'name': area_name,
-          'group': area_name,
-          'date': date,
-          'value': 0
-        }
+        {'name': area_name, 'group': area_name, 'date': date, 'value': 0}
       )
     dict_list += dict_list_1
     continue
@@ -133,7 +129,9 @@ def update_fig(i):
     china_w_needed_provinces.name,
   ):
     ax.text(lon, lat, province, fontsize=fontsize)
-  ax.set_title('福利彩票月销售数据 {} - {} 单位：（亿元）'.format(dates[0], dates[i]))
+  ax.set_title(
+    '福利彩票月销售数据 {} - {} 单位：（亿元）'.format(dates[0], dates[i])
+  )
   ax.set_axis_off()
   fig = ax.get_figure()
   cax = fig.add_axes([0.9, 0.1, 0.03, 0.8])
@@ -156,4 +154,3 @@ anim = FuncAnimation(
 
 # plt.show()
 anim.save(filename='video/map_animation.mp4', writer='ffmpeg')
-
