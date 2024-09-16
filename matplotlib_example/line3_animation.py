@@ -1,3 +1,4 @@
+# X轴动态更新
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
