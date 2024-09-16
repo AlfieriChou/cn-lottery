@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import matplotlib
 from matplotlib import font_manager
-import numpy as np
 import datetime
 
 from mysql import connection
